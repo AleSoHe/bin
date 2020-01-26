@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Get keyboard xinput id
+keyb_id=$(xinput | grep "AT Translated Set 2" | awk '{print $7}' | cut -d "=" -f2)
+
+# float the id
+xinput float $keyb_id
+
+# Touchpad tap
+touchpad_id=$(xinput | grep -i "Touchpad" | awk '{print $6}' | cut -d  "=" -f2)
+touchpad_prop_id=$(xinput list-props 16 | grep "Tapping Enabled (" | awk '{print $4}' | cut -d "(" -f2 | cut -d ")" -f1)
+
+# Set tap
+xinput set-prop $touchpad_id $touchpad_prop_id 1 

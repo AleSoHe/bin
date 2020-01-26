@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# DIRECTORIES
+BASEDIR=~/Documents/Personal/medidas/
+DATADIR=$BASEDIR/data/
+PLOTDIR=$BASEDIR/pgf/
+
+# PATHS
+WEIGHTSPATH=$DATADIR/peso.dat
+PLOTTEX=$PLOTDIR/plot.tex
+
+# FLAGS
+a_flag=''
+p_flag=''
+weight=''
+
+print_usage() {
+  printf "Usage: ..."
+}
+
+while getopts 'a:p' flag; do
+  case "${flag}" in
+    a) a_flag='true'
+       weight=${OPTARG} ;;
+    p) p_flag='true';;   
+    *) print_usage
+       exit 1 ;;
+  esac
+done
+
+if [ "$a_flag" == "true"  ]; then
+    date="$(date +%y-%m-%d)"
+    echo $date $weight >> $WEIGHTSPATH 
+fi
+
+if [ "$p_flag" == "true"  ]; then
+    PLOTIMAGE="${PLOTTEX%.tex}.pdf"
+    cd $PLOTDIR; pdflatex $PLOTTEX; zathura $PLOTIMAGE
+fi
+
