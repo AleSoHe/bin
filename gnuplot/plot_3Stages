@@ -1,0 +1,45 @@
+#!/bin/bash
+
+file=$1
+gnuplotTmpDir=~/bin/gnuplot/
+
+trap killgroup SIGINT
+
+killgroup(){
+  echo killing...
+    kill 0
+}
+
+
+while [ 1 ]
+do
+    # Extract loss and accuracy values
+    grep loss $file | awk '{print $11, $14, $17, $20, $23, $26}' | cat -n > ~/bin/gnuplot/tmp.data
+
+    # Plot loss 
+    gnuplot -e "set terminal png size 800,500; \
+                set output '${gnuplotTmpDir}/loss.png';\
+                plot 
+                    '${gnuplotTmpDir}/tmp.data' using 1:2 every ::50 title 'Loss S1' with lines,
+                    '${gnuplotTmpDir}/tmp.data' using 1:3 every ::50 title 'Loss S2' with lines,
+                    '${gnuplotTmpDir}/tmp.data' using 1:4 every ::50 title 'Loss S3' with lines 
+                " 
+
+    # Plot loss 
+    gnuplot -e "set terminal png size 800,500; \
+                set key right bottom; \
+                set output '${gnuplotTmpDir}/accuracy.png';\
+                plot 
+                    '${gnuplotTmpDir}/tmp.data' using 1:5 every ::50 lw 2 title 'Accuracy S1' with lines,
+                    '${gnuplotTmpDir}/tmp.data' using 1:6 every ::50 lw 2 title 'Accuracy S2' with lines,
+                    '${gnuplotTmpDir}/tmp.data' using 1:7 every ::50 lw 2 title 'Accuracy S3' with lines'
+                "
+    sleep 1
+done &
+
+sleep 1
+
+feh --reload 0.5 $gnuplotTmpDir/loss.png &
+feh --reload 0.5 $gnuplotTmpDir/accuracy.png &
+
+wait
