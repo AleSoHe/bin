@@ -1,7 +1,7 @@
 #!/bin/bash
 
 file=$1
-gnuplotTmpDir=~/bin/gnuplot/
+gnuplotTmpDir=~/bin/gnuplot/tmp/
 
 trap killgroup SIGINT
 
@@ -14,25 +14,36 @@ killgroup(){
 while [ 1 ]
 do
     # Extract loss and accuracy values
-    grep loss $file | awk '{print $11, $14, $17, $20, $23, $26}' | cat -n > ~/bin/gnuplot/tmp.data
+    grep loss $file | awk '{print $11, $14, $17}' | cat -n > ~/bin/gnuplot/tmp/loss.data
 
     # Plot loss 
     gnuplot -e "set terminal png size 800,500; \
                 set output '${gnuplotTmpDir}/loss.png';\
                 plot 
-                    '${gnuplotTmpDir}/tmp.data' using 1:2 every ::50 title 'Loss S1' with lines,
-                    '${gnuplotTmpDir}/tmp.data' using 1:3 every ::50 title 'Loss S2' with lines,
-                    '${gnuplotTmpDir}/tmp.data' using 1:4 every ::50 title 'Loss S3' with lines 
+                    '${gnuplotTmpDir}/loss.data' using 1:2 every ::50 smooth acsplines title 'Loss S1' with lines,
+                    '${gnuplotTmpDir}/loss.data' using 1:3 every ::50 smooth acsplines title 'Loss S2' with lines,
+                    '${gnuplotTmpDir}/loss.data' using 1:4 every ::50 smooth acsplines title 'Loss S3' with lines 
                 " 
+    grep 'Precision:' $file | awk '{print $4,$8,$12}' | cat -n > ~/bin/gnuplot/tmp/precision.data
+    grep 'Recall:' $file | awk '{print $4,$8,$12}' | cat -n > ~/bin/gnuplot/tmp/recall.data
 
-    # Plot loss 
+    # Plot Precision 
     gnuplot -e "set terminal png size 800,500; \
                 set key right bottom; \
-                set output '${gnuplotTmpDir}/accuracy.png';\
+                set output '${gnuplotTmpDir}/precision.png';\
                 plot 
-                    '${gnuplotTmpDir}/tmp.data' using 1:5 every ::50 lw 2 title 'Accuracy S1' with lines,
-                    '${gnuplotTmpDir}/tmp.data' using 1:6 every ::50 lw 2 title 'Accuracy S2' with lines,
-                    '${gnuplotTmpDir}/tmp.data' using 1:7 every ::50 lw 2 title 'Accuracy S3' with lines'
+                    '${gnuplotTmpDir}/precision.data' using 1:2 smooth mcsplines lw 2 title 'Precision S1' with lines,
+                    '${gnuplotTmpDir}/precision.data' using 1:3 smooth mcsplines lw 2 title 'Precision S2' with lines,
+                    '${gnuplotTmpDir}/precision.data' using 1:4 smooth mcsplines lw 2 title 'Precision S3' with lines'
+                "
+    # Plot Recall
+    gnuplot -e "set terminal png size 800,500; \
+                set key right bottom; \
+                set output '${gnuplotTmpDir}/recall.png';\
+                plot 
+                    '${gnuplotTmpDir}/recall.data' using 1:2 smooth mcsplines lw 2 title 'Recall S1' with lines,
+                    '${gnuplotTmpDir}/recall.data' using 1:3 smooth mcsplines lw 2 title 'Recall S2' with lines,
+                    '${gnuplotTmpDir}/recall.data' using 1:4 smooth mcsplines lw 2 title 'Recall S3' with lines'
                 "
     sleep 1
 done &
@@ -40,6 +51,7 @@ done &
 sleep 1
 
 feh --reload 0.5 $gnuplotTmpDir/loss.png &
-feh --reload 0.5 $gnuplotTmpDir/accuracy.png &
+feh --reload 2 $gnuplotTmpDir/precision.png &
+feh --reload 2 $gnuplotTmpDir/recall.png &
 
 wait
