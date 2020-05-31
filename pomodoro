@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Minutes assignment, manually or by default
+minutes=$1
+[[ -z $minutes ]] && minutes=15
+
+t=0
+while [ $t -le $((60*$minutes-1)) ]
+do
+   em=$(printf %02d $((t/60)))
+   es=$(printf %02d $((t%60)))
+   echo -ne "\r${em}:${es}" 
+   t=$(($t+1))
+   sleep 1
+done
+
+echo -ne "\n"
+beep pomodoro; sleep 0.1; beep pomodoro; sleep 0.1; beep pomodoro
+

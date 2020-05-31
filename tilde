@@ -1,0 +1,13 @@
+#!/bin/bash
+state=${1? Usage: tilde [on/off]}
+
+if [ $state == 'on' ]; then
+    setxkbmap -layout us -variant alt-intl
+    beep tilde_on; beep tilde_on;
+    echo "Tilde activated"
+else
+    setxkbmap -layout us
+    beep tilde_off; beep tilde_off;
+    echo "Tilde deactivated"
+fi
+

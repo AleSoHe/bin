@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Prints volume info
+# Usage: volume optional[sink_number]
+
+sink=$1
+
+# Check if pulse audio is installed
+command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed."; exit 1; }
+
+# Choose first sink if not defined in parameters
+[ -z $sink ] && sink=$(pactl list sinks | grep Sink | grep -oP '[0-9].*$' | head -n 1)
+
+# Check if sink was defined, whether by user or the first found.
+[ -z $sink ] && { echo "Error: no sinks to control"; exit 1; }
+
+# Assign up or down volume (checking the limits and if sink really exist)
+current=$(pacmd dump-volumes | grep "Sink $sink" | awk '{print $8}' | sed 's/\%//')
+[ -z $current ] && { echo "Error: sink not found."; exit 1; }
+
+# Print value 0-100
+echo $current
+

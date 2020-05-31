@@ -1,0 +1,17 @@
+#!/bin/bash
+
+sound=${1? Usage beep [volume/tilde_on/tilde_off/pomodoro]}
+
+# Check sounds dir
+[ -d /usr/share/sounds/ ] || { echo "Error: No sounds dir /usr/share/sounds/"; exit 1; } 
+
+# Choose first sounds folder option
+sounds_dir=/usr/share/sounds/$(ls /usr/share/sounds/ | head -n 1)/stereo/
+
+# Options
+[ $sound == "volume" ] && paplay $sounds_dir/audio-volume-change.oga && exit 0
+[ $sound == "tilde_on" ] && paplay $sounds_dir/device-added.oga && exit 0
+[ $sound == "tilde_off" ] && paplay $sounds_dir/device-removed.oga && exit 0
+[ $sound == "pomodoro" ] && paplay $sounds_dir/complete.oga && exit 0
+echo "Error: Usage beep [volume/tilde_on/tilde_off/pomodoro]"
+exit 1

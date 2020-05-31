@@ -1,0 +1,8 @@
+#!/bin/bash
+wallpapers=~/Pictures/Wallpapers/
+if [ -d $wallpapers ]; then
+    feh --randomize --bg-fill $wallpapers
+else
+    echo "Error: $wallpapers doesn't exits."
+    exit 1
+fi
