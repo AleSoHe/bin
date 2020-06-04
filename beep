@@ -6,7 +6,8 @@ sound=${1? Usage beep [volume/tilde_on/tilde_off/pomodoro]}
 [ -d /usr/share/sounds/ ] || { echo "Error: No sounds dir /usr/share/sounds/"; exit 1; } 
 
 # Choose first sounds folder option
-sounds_dir=/usr/share/sounds/$(ls /usr/share/sounds/ | head -n 1)/stereo/
+sounds_provider="freedesktop/"
+sounds_dir=/usr/share/sounds/${sounds_provider}/stereo/
 
 # Options
 [ $sound == "volume" ] && paplay $sounds_dir/audio-volume-change.oga && exit 0

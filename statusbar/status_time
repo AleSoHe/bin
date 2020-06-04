@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Charging/Discharging Percentage
+date=$(date)
+
+# Retrieve words
+set -- $date
+
+# Day, Month, Time
+d=$2
+m=$3
+t=${4%???}
+
+echo 📅 $d-$m $t
+
+

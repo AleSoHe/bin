@@ -1,0 +1,19 @@
+#!/bin/bash
+bold="\e[1m"
+green="\e[92m"
+
+
+# Charging/Discharging Percentage
+battery_info=$(upower -i `upower -e | grep 'BAT'` | grep -e state -e percentage | awk '{print $2}')
+
+# Retrieve words
+set -- $battery_info
+state=$1
+percentage=$2
+
+[ $state == "charging" ] && output="🔋⚡$percentage"
+[ $state == "discharging" ] && output="🔋 $percentage"
+[ $state == "fully-charged" ] && output="🔋 $percentage"
+
+echo -e $output
+

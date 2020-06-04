@@ -1,7 +1,16 @@
 #!/bin/bash
+input=$1
 
-file=$(ls *.tex | dmenu | sed 's/.tex//g')
+if [ -z $input ]; then
+    file=$(ls *.tex | dmenu | sed 's/.tex//g')
+elif [ -d $input ]; then
+    file=$(ls ${input}*.tex | dmenu | sed 's/.tex//g')
+else
+    file=${input%.tex}
+fi
+
 [ -z $file ] && exit 1
+echo ${file}.pdf
 zathura ${file}.pdf & 
 vim ${file}.tex
 

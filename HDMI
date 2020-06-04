@@ -6,15 +6,21 @@ pos=$2
 # If position not defined, set to right
 [[ -z $pos ]] && pos=right
 
-connection=$(xrandr | grep HDMI | awk '{print $2}')
+# Select HDMI
+hdmi_port=$(xrandr | grep HDMI | head -n 1 | awk '{print $1}')
+# Select Principal Monitor
+edp=$(xrandr | grep eDP | head -n 1 | awk '{print $1}')
+
+connection=$(xrandr | grep $hdmi_port | head -n 1 | awk '{print $2}')
 
 if [ $state == 'on' ]; then
     if [ $connection == 'disconnected' ]; then
         echo "Error: HDMI disconnected"
         exit 1
     else
-        xrandr --output HDMI-1 --mode 1366x768 --${pos}-of eDP-1
+        echo $edp
+        xrandr --output $hdmi_port --mode 1280x720 --${pos}-of $edp 
     fi
 else
-    xrandr --output HDMI-1 --off
+    xrandr --output $hdmi_port --off
 fi
