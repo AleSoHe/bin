@@ -1,0 +1,23 @@
+#!/bin/bash
+
+TIME=30000 # in miliseconds
+option=${1? Usage notify [OPTION]}
+
+# OPTIONS:
+    # battery_low
+    # rest
+
+# Set message for the option
+[  $option == "battery_low"  ]  &&  message="BATERIA_BAJA!"
+[  $option == "rest"  ]         &&  message="DESCANSAR"
+
+# If no option matches, exit
+[  -z $message  ] && exit 1;
+
+# Send notification
+notify-send $message -t $TIME
+
+# Sound
+beep $option
+
+exit 0

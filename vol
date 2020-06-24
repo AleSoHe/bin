@@ -17,18 +17,18 @@ current=$(pacmd dump-volumes | grep "Sink $sink" | awk '{print $8}' | sed 's/\%/
 [ -z $current ] && { echo "Error: sink not found."; exit 1; }
 
 if [ $state == "up" ]; then
-    beep volume
+    beep volume &
     if [ $current -le 95 ]; then 
         pactl set-sink-volume $sink +5%
     fi
 elif [ $state == "down" ]; then 
     if [ $current -ge 5 ]; then
         pactl set-sink-volume $sink -5%
-        beep volume
+        beep volume &
     fi
 elif [ $state == "mute" ]; then
     pactl set-sink-mute $sink toggle
-    beep volume
+    beep volume &
 else
     echo "Error: Usage: vol [up/down/mute]"
     exit 1

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Optional 
+push=$1
+
+# If no push, go to wdir
+[ -z $push ] && [ -f ~/.wdir ] && cd $(cat ~/.wdir)
+
+# If push, then push directory to ~/.wdir
+echo $PWD > ~/.wdir

@@ -1,18 +1,36 @@
 #!/bin/bash
 
-sound=${1? Usage beep [volume/tilde_on/tilde_off/pomodoro]}
+# Sounds provider (freedesktop) folder
+SOUNDS_PROVIDER="freedesktop/"
+SOUNDS_DIR=/usr/share/sounds/${SOUNDS_PROVIDER}/stereo/
+# Custom sounds folder
+SOUNDS_PROVIDER_CUSTOM="mysounds/"
+SOUNDS_DIR_CUSTOM=/usr/share/sounds/${SOUNDS_PROVIDER_CUSTOM}/
+
+# OPTIONS:
+    # volume
+    # tilde_on
+    # tilde_off
+    # pomodoro
+    # battery_low
+    # rest
+    # terminal
+
+sound=${1? Usage beep [OPTION]}
 
 # Check sounds dir
 [ -d /usr/share/sounds/ ] || { echo "Error: No sounds dir /usr/share/sounds/"; exit 1; } 
 
-# Choose first sounds folder option
-sounds_provider="freedesktop/"
-sounds_dir=/usr/share/sounds/${sounds_provider}/stereo/
+random_sound=$(ls $SOUNDS_DIR_CUSTOM | shuf | head -n 1)
 
 # Options
-[ $sound == "volume" ] && paplay $sounds_dir/audio-volume-change.oga && exit 0
-[ $sound == "tilde_on" ] && paplay $sounds_dir/device-added.oga && exit 0
-[ $sound == "tilde_off" ] && paplay $sounds_dir/device-removed.oga && exit 0
-[ $sound == "pomodoro" ] && paplay $sounds_dir/complete.oga && exit 0
-echo "Error: Usage beep [volume/tilde_on/tilde_off/pomodoro]"
+[  $sound  ==  "rest"         ]  &&  paplay  $SOUNDS_DIR_CUSTOM/trump-youre_fired.oga  &&  exit  0
+[  $sound  ==  "volume"       ]  &&  paplay  $SOUNDS_DIR/audio-volume-change.oga       &&  exit  0
+[  $sound  ==  "terminal"     ]  &&  paplay  $SOUNDS_DIR_CUSTOM/$random_sound          &&  exit  0
+[  $sound  ==  "pomodoro"     ]  &&  paplay  $SOUNDS_DIR_CUSTOM/trump-youre_fired.oga                  &&  exit  0
+[  $sound  ==  "tilde_on"     ]  &&  paplay  $SOUNDS_DIR/device-added.oga              &&  exit  0
+[  $sound  ==  "tilde_off"    ]  &&  paplay  $SOUNDS_DIR/device-removed.oga            &&  exit  0
+[  $sound  ==  "battery_low"  ]  &&  paplay  $SOUNDS_DIR_CUSTOM/pikachu.oga            &&  exit  0
+
+echo "Error: Usage beep [OPTION]"
 exit 1

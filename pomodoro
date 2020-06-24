@@ -1,7 +1,36 @@
 #!/bin/bash
+# Usage: pomodoro [option] 
+# OPTIONS:
+    # start (or blank)
+    # finish
+    # read
+
+OPT=$1
+[ -z $OPT ] && OPT='start'
+
+DIR=$HOME/.local/share/pomodoro
+
+# READ
+[ $OPT == 'read' ] && cat $DIR/time && exit 0;
+
+# Kill all pomodoro processes, except this one
+for p in $(pgrep pomodoro); 
+do
+    [ $p == $$ ] && continue
+    kill -9 $p
+done
+
+# FINISH
+# Kill only this process, as the other pomodoros were already killed
+# But first write a '-' to the time file, to indicate pomodoro is not running
+# And reload dwmblocks, with flag 34+8
+[ $OPT == 'finish' ] && echo '-' > $DIR/time && kill -42 $(pidof dwmblocks) && exit 0;
+
+# START
+mkdir -p $DIR
 
 # Minutes assignment, manually or by default
-minutes=$1
+minutes=$2
 [[ -z $minutes ]] && minutes=15
 
 t=0
@@ -9,11 +38,14 @@ while [ $t -le $((60*$minutes-1)) ]
 do
    em=$(printf %02d $((t/60)))
    es=$(printf %02d $((t%60)))
-   echo -ne "\r${em}:${es}" 
+   #echo -ne "\r${em}:${es}" > $DIR/time
+   echo -ne "${em}:${es} " > $DIR/time
    t=$(($t+1))
+   kill -42 $(pidof dwmblocks)
    sleep 1
 done
 
-echo -ne "\n"
-beep pomodoro; sleep 0.1; beep pomodoro; sleep 0.1; beep pomodoro
+echo '-' > $DIR/time
+kill -42 $(pidof dwmblocks)
+beep pomodoro & sleep 0.03; beep pomodoro & sleep 0.03 & beep pomodoro
 

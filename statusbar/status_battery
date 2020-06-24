@@ -2,7 +2,6 @@
 bold="\e[1m"
 green="\e[92m"
 
-
 # Charging/Discharging Percentage
 battery_info=$(upower -i `upower -e | grep 'BAT'` | grep -e state -e percentage | awk '{print $2}')
 
@@ -15,5 +14,9 @@ percentage=$2
 [ $state == "discharging" ] && output="🔋 $percentage"
 [ $state == "fully-charged" ] && output="🔋 $percentage"
 
+# Notify is battery running low
+[ $state == "discharging" ] && [ ${percentage%\%} -lt 20 ] && notify battery_low
+
+# OUTPUT
 echo -e $output
 
