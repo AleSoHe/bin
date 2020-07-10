@@ -20,12 +20,18 @@ if [ $state == "up" ]; then
     beep volume &
     if [ $current -le 95 ]; then 
         pactl set-sink-volume $sink +5%
+    else
+        pactl set-sink-volume $sink 100%
     fi
+
 elif [ $state == "down" ]; then 
+    beep volume &
     if [ $current -ge 5 ]; then
         pactl set-sink-volume $sink -5%
-        beep volume &
+    else
+        pactl set-sink-volume $sink 0%
     fi
+
 elif [ $state == "mute" ]; then
     pactl set-sink-mute $sink toggle
     beep volume &

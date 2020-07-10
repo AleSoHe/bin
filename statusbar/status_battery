@@ -10,7 +10,7 @@ set -- $battery_info
 state=$1
 percentage=$2
 
-[ $state == "charging" ] && output="🔋⚡$percentage"
+[ $state == "charging" ] && output="🔋⚡ $percentage"
 [ $state == "discharging" ] && output="🔋 $percentage"
 [ $state == "fully-charged" ] && output="🔋 $percentage"
 

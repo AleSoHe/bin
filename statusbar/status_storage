@@ -1,0 +1,12 @@
+#!/bin/bash
+storage_info=$(df -lh | egrep '/home|/DATA|/$' | awk '{print $4,$2,$6}')
+
+root=$(echo "$storage_info" | grep '/$' | awk '{print $1"|"$2}')
+home=$(echo "$storage_info" | grep 'home' | awk '{print $1"|"$2}')
+data=$(echo "$storage_info" | grep 'DATA' | awk '{print $1"|"$2}')
+#
+[ "$root" != "" ] && echo -e -n "√[$root]"
+[ "$home" != "" ] && echo -n " 🏠[$home]"
+[ "$data" != "" ] && echo " 💿[$data]"
+
+

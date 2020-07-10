@@ -18,6 +18,16 @@ command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed.
 current=$(pacmd dump-volumes | grep "Sink $sink" | awk '{print $8}' | sed 's/\%//')
 [ -z $current ] && { echo "Error: sink not found."; exit 1; }
 
-# Print value 0-100
-echo $current
+# Assign blocks
+num_blocks=$(($current/20))
+
+for ((i=0; i<=4; i++))
+do
+    if [ $i -lt $num_blocks ]; then
+        echo -n "▮"
+    else
+        echo -n "▯"
+    fi
+done
+echo ""
 
