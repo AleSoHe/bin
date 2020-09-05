@@ -9,6 +9,7 @@ OPT=$1
 [ -z $OPT ] && OPT='start'
 
 DIR=$HOME/.local/share/pomodoro
+mkdir -p $DIR
 
 # READ
 [ $OPT == 'read' ] && cat $DIR/time && exit 0;

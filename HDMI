@@ -18,8 +18,14 @@ if [ $state == 'on' ]; then
         echo "Error: HDMI disconnected"
         exit 1
     else
-        xrandr --output $hdmi_port --mode 1280x720 --${pos}-of $edp 
-        xrandr --output $edp --primary
+      if [ $pos == "above" ]; then
+        xrandr --output $hdmi_port --mode 1366x768 --${pos} $edp 
+        xrandr --output $hdmi_port --primary
+      else 
+        xrandr --output $hdmi_port --mode 1366x768 --${pos}-of $edp 
+        xrandr --output $hdmi_port --primary
+      fi
+      wallpaper &
     fi
 else
     xrandr --output $hdmi_port --off
