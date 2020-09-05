@@ -1,0 +1,37 @@
+#!/bin/bash
+
+NONE='\e[0m'
+BOLD='\e[1m'
+YELL='\e[33m'
+GREEN='\033[32m'
+
+function show_connections {
+  echo -e "${BOLD}-------------"
+  echo -e "ID Connection"
+  echo -e "-------------${NONE}"
+  nmcli d wifi list | tail -n +2 | sed 's/\*//g' | awk '{print NR "  " $1}'
+  echo -e "-------------${NONE}"
+  echo ""
+}
+
+function set_connection_name_from_id {
+  connection=$(nmcli d wifi list | tail -n +2 | sed 's/\*//g' | awk '{print NR, $1}' | grep ^$1 | awk '{print $2}')
+}
+
+# Enable wifi
+nmcli radio wifi on
+
+# Show available connections
+show_connections
+
+# Prompt for connection ID
+echo -e "Choose a connection (ID):${BOLD}${YELL} \c"
+read connection_id; set_connection_name_from_id $connection_id
+echo -e "$NONE---------------------------"
+
+# Prompt for the password
+read -s -p 'PASSWORD: ' password;
+
+# Connect
+echo -e "\\_0_0_/\n"
+(nmcli -w 5 d wifi connect Nexxt_41EB18 password $password &> /dev/null && echo -e "Now you are connected to $GREEN$connection") || echo "Error connecting"
