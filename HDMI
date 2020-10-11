@@ -1,6 +1,6 @@
 #!/bin/bash
 
-state=${1?Usage HDMI [on/off] opt[left/right]}
+state=${1?Usage HDMI [on/off] opt[left/right] opt[primary]}
 pos=$2
 
 # If position not defined, set to right
@@ -22,8 +22,9 @@ if [ $state == 'on' ]; then
         xrandr --output $hdmi_port --mode 1366x768 --${pos} $edp 
         xrandr --output $hdmi_port --primary
       else 
-        xrandr --output $hdmi_port --mode 1366x768 --${pos}-of $edp 
-        xrandr --output $hdmi_port --primary
+        xrandr --output $hdmi_port --mode 1920x1080 --${pos}-of $edp 
+        #xrandr --output $hdmi_port --mode 1366x768 --${pos}-of $edp 
+        #xrandr --output $edp --primary
       fi
       wallpaper &
     fi
