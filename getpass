@@ -1,0 +1,18 @@
+#!/bin/bash
+
+option=$1
+
+if [ -z $option ]; then
+  option=$(echo -e "github\ngitlab" | dmenu)
+fi
+[ -z $option ] && { echo "You didn't chose an option"; exit 1; }
+
+tmpmsg=$(mktemp /tmp/getpass-msg.XXXX)
+if [ $option == "gitlab" ]; then
+  pass -c gitlab/tokens/repo > $tmpmsg
+  notify-send -t 2000 "$(cat $tmpmsg)"
+elif [ $option == "github" ]; then
+  pass -c github/tokens/repo > $tmpmsg
+  notify-send -t 2000 "$(cat $tmpmsg)"
+fi
+
