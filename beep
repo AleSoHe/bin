@@ -32,6 +32,7 @@ random_sound=$(ls $SOUNDS_DIR_CUSTOM | shuf | head -n 1)
 [  $sound  ==  "tilde_off"    ]  &&  paplay  $SOUNDS_DIR/device-removed.oga            &&  exit  0
 [  $sound  ==  "battery_low"  ]  &&  paplay  $SOUNDS_DIR_CUSTOM/pikachu.oga            &&  exit  0
 [  $sound  ==  "shot"         ]  &&  paplay  $SOUNDS_DIR/screen-capture.oga            &&  exit  0
+[  $sound  ==  "other"        ]  &&  paplay  $SOUNDS_DIR/message.oga                    &&  exit  0
 
 echo "Error: Usage beep [OPTION]"
 exit 1
