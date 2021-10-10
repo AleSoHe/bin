@@ -1,0 +1,43 @@
+#!/bin/bash
+
+ACCOUNT=$1
+FIELD=$2
+
+GROUP=""
+
+function select_account() {
+  # Choose a group first
+  pass_groups=$(lpass ls | awk -F/ '{print $1}' | sort | uniq)
+  GROUP=$(echo "$pass_groups" | dmenu -i -b -l 5 -p "Choose group")
+  #TODO: check empty
+
+  # Choose the account using the selected group filter
+  group_accounts=$(lpass ls | egrep "^$GROUP" | awk '{print $1}' | awk -F/ '{print $2}')
+  #TODO: check empty
+
+  ACCOUNT=$(echo "$group_accounts" | dmenu -i -b -l 5 -p "Choose account")
+}
+
+function select_field() {
+  fields=$(lpass show $ACCOUNT | awk -F: '{print $1}' | tail -n +2)
+  echo $fields
+  FIELD=$(echo "$fields" | dmenu -i -b -l 5 -p "Choose field to copy")
+  # TODO: check empty
+}
+
+
+# Select group if account was not set
+if [ -z "$ACCOUNT" ]; then
+  select_account
+fi
+
+# Select the field to copy
+if [ -z "$FIELD" ]; then
+  select_field
+fi
+
+# Copy field to clipboard
+lpass show $ACCOUNT | egrep "^${FIELD}: " | awk '{print $2}' | xclip -sel c
+
+# Post a message
+notify other "LastPass" "Copied $FIELD from $GROUP/$ACCOUNT to the clipboard"
