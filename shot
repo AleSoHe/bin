@@ -2,16 +2,20 @@
 
 IMG_NAME=$1
 
-SAVE_DIR=/home/$USER/Pictures/Screenshots/
+gnome-screenshot --interactive
 
-if [ -z $IMG_NAME ]; then
-  maim -s -u | xclip -selection clipboard -t image/png -i
-  echo "IMAGE IN CLIPBOARD"
-else
-  [ -d $SAVE_DIR ] || (mkdir $SAVE_DIR && echo "CREATING $SAVE_DIR DIRECTORY")
-  #maim > $SAVE_DIR${IMG_NAME}.png
-  maim -s -u > $SAVE_DIR${IMG_NAME}.png
-  echo "SAVING IMAGE TO $IMG_NAME.png"
-fi
 
+#SAVE_DIR=/home/$USER/Pictures/Screenshots/
+#
+#if [ -z $IMG_NAME ]; then
+#  maim -s -u | xclip -selection clipboard -t image/png -i
+#  xclip -selection clipboard -o | feh -
+#  echo "IMAGE IN CLIPBOARD"
+#else
+#  [ -d $SAVE_DIR ] || (mkdir $SAVE_DIR && echo "CREATING $SAVE_DIR DIRECTORY")
+#  maim -s -u > $SAVE_DIR${IMG_NAME}.png
+#  echo "SAVING IMAGE TO $IMG_NAME.png"
+#fi
+#
+#notify shot
 
