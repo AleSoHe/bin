@@ -12,7 +12,7 @@ command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed.
 # Check if sink was defined, whether by user or the first found.
 [ -z $sink ] && { echo "Error: no sinks to control"; exit 1; }
 
-# Assign up or down volume (checking the limits and if sink really exist)
+# Assign up or down volume (checking the limits and if sink really exists)
 current=$(pacmd dump-volumes | grep "Sink $sink" | awk '{print $8}' | sed 's/\%//')
 [ -z $current ] && { echo "Error: sink not found."; exit 1; }
 
