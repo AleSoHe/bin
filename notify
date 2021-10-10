@@ -1,6 +1,5 @@
 #!/bin/bash
 
-TIME=30000 # in miliseconds
 option=${1? Usage notify [OPTION]}
 
 # OPTIONS:
@@ -8,16 +7,18 @@ option=${1? Usage notify [OPTION]}
     # rest
 
 # Set message for the option
-[  $option == "battery_low"  ]  &&  message="BATERIA_BAJA!"
-[  $option == "rest"  ]         &&  message="DESCANSAR"
-
-# If no option matches, exit
-[  -z $message  ] && exit 1;
-
-# Send notification
-notify-send $message -t $TIME
+[  $option == "battery_low"  ]  &&  title="BATERIA_BAJA!"
+[  $option == "rest"  ]         &&  title="DESCANSAR"
+[  $option == "shot"  ]         &&  title="SCREENSHOT"
+[  $option == "other" ]         &&  title="${2}"; message="${3}"
 
 # Sound
 beep $option
+
+# If no option matches, exit
+[ "$title" == "" ] && exit 1;
+
+# Send notification
+notify-send --expire-time=3000 "$title" "$message"
 
 exit 0
