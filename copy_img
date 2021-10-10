@@ -1,0 +1,7 @@
+#!/bin/bash
+
+IMG_PATH=${1?Usage copy_img [IMG_PATH]}
+
+# TODO: check png/jpg
+
+xclip -selection clipboard -t image/png -i $IMG_PATH
