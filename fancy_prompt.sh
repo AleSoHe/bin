@@ -4,6 +4,11 @@ function _fancy_prompt {
   local YELLOW="\[\033[01;33m\]"
   local BLUE="\[\033[01;34m\]"
   local WHITE="\[\033[00m\]"
+  local GRAY="\033[1;37m"
+  local NORMAL="\e[0m"
+  local UNDER="\e[4m"
+  local DIM="\e[2m"
+  local BLINK="\e[5m"
 
   local PROMPT=""
 
@@ -49,6 +54,9 @@ function _fancy_prompt {
     # Closing paren
     PROMPT=$PROMPT"$YELLOW)"
   fi
+
+  # Clock
+  #PROMPT=$DIM[$(date '+%H:%M:%S')]$NORMAL" $PROMPT"
 
   # Final $ symbol
   PROMPT=$PROMPT"$BLUE\$$WHITE "
