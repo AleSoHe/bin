@@ -8,6 +8,7 @@ command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed.
 
 # Choose first sink if not defined in parameters
 [ -z $sink ] && sink=$(pactl list sinks | grep Sink | grep -oP '[0-9].*$' | head -n 1)
+#[ -z $sink ] && sink=$(pactl info | sed -En 's/Default Sink: (.*)/\1/p')
 
 # Check if sink was defined, whether by user or the first found.
 [ -z $sink ] && { echo "Error: no sinks to control"; exit 1; }
