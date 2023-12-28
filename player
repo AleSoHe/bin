@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# OPTIONS:
+    # play
+    # pause
+    # stop
+    # next
+    # previous
+
+state=${1? Usage $0 [play/pause/stop/next/previous]}
+
+case $state in
+
+  "play-pause")
+    playerctl play-pause
+    ;;
+  "stop")
+    playerctl stop
+    ;;
+  "next")
+    playerctl next
+    ;;
+  "previous")
+    playerctl previous
+    ;;
+  *)
+    echo "Error, see usage"
+    exit 1
+    ;;
+esac
+
+exit 0

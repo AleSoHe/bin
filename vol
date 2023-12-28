@@ -7,7 +7,8 @@ sink=$2
 command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed."; exit 1; }
 
 # Choose first sink if not defined in parameters
-[ -z $sink ] && sink=$(pactl list sinks | grep Sink | grep -oP '[0-9].*$' | head -n 1)
+#[ -z $sink ] && sink=$(pactl list sinks | grep Sink | grep -oP '[0-9].*$' | head -n 1)
+[ -z $sink ] && sink=$(pactl list sinks | grep Sink | grep -oP '[0-9].*$' | tail -n 1)
 #[ -z $sink ] && sink=$(pactl info | sed -En 's/Default Sink: (.*)/\1/p')
 
 # Check if sink was defined, whether by user or the first found.
@@ -16,6 +17,8 @@ command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed.
 # Assign up or down volume (checking the limits and if sink really exists)
 current=$(pacmd dump-volumes | grep "Sink $sink" | awk '{print $8}' | sed 's/\%//')
 [ -z $current ] && { echo "Error: sink not found."; exit 1; }
+
+echo $current
 
 if [ $state == "up" ]; then
     beep volume &

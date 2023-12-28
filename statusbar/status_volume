@@ -14,12 +14,16 @@ command -v pactl > /dev/null 2>&1 || { echo "Error: pulse audio isn't installed.
 # Check if sink was defined, whether by user or the first found.
 [ -z $sink ] && { echo "Error: no sinks to control"; exit 1; }
 
+muted=$(pacmd list sinks | grep muted | head -$((sink+1)) | tail -1 | awk '{print $2}')
+
 # Assign up or down volume (checking the limits and if sink really exist)
 current=$(pacmd dump-volumes | grep "Sink $sink" | awk '{print $8}' | sed 's/\%//')
 [ -z $current ] && { echo "Error: sink not found."; exit 1; }
 
 # Assign blocks
 num_blocks=$(($current/20))
+
+[ "yes" == "$muted" ] && { echo "Muted"; exit 0; }
 
 for ((i=0; i<=4; i++))
 do

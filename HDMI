@@ -22,7 +22,8 @@ if [ $state == 'on' ]; then
         xrandr --output $hdmi_port --mode 1366x768 --${pos} $edp 
         xrandr --output $hdmi_port --primary
       else 
-        xrandr --output $hdmi_port --mode 1920x1080 --${pos}-of $edp 
+        xrandr --output $hdmi_port --mode 1920x1080 --${pos}-of $edp --primary
+        #xrandr --output $hdmi_port --mode 2560x1440 --${pos}-of $edp 
         #xrandr --output $hdmi_port --mode 1366x768 --${pos}-of $edp 
         #xrandr --output $edp --primary
       fi

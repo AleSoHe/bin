@@ -9,4 +9,3 @@ data=$(echo "$storage_info" | grep 'DATA' | awk '{print $1"|"$2}')
 [ "$home" != "" ] && echo -n " 🏠[$home]"
 [ "$data" != "" ] && echo " 💿[$data]"
 
-
