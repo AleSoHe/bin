@@ -1,0 +1,64 @@
+#!/bin/bash
+
+option=${1? Usage $0 [on/off/get]}
+
+# OPTIONS:
+    # on
+    # off
+    # get
+
+function dwmblocks_signal() {
+  # dwmblocks used signal 2 to update the notifications icon (36 comes from 2 + 34)
+  kill -36 $(pidof dwmblocks)
+}
+
+function notifications_off() {
+  dunstctl set-paused true
+  dwmblocks_signal
+}
+
+function notifications_on() {
+  dunstctl set-paused false
+  dwmblocks_signal
+}
+
+function notifications_toggle() {
+  dunstctl set-paused toggle
+  dwmblocks_signal
+}
+
+function notifications_get() {
+  paused=$(dunstctl is-paused)
+  [  "$paused"  ==  "false"  ]  &&  echo  -n  "🔔 on "
+  [  "$paused"  ==  "true"   ]  &&  echo  -n  "🔔 off "
+}
+
+# We could be calling this script via a button (with a status bar manager)
+case $BUTTON in
+	1) notifications_toggle
+esac
+
+# If button was set, return, otherwise parse the argument
+[ -z $BUTTON ] || exit 0
+
+[  $option  ==  "off"  ]  &&  notifications_off
+[  $option  ==  "on"   ]  &&  notifications_on
+[  $option  ==  "get"  ]  &&  notifications_get
+
+# If no option matches, exit
+[ "$option" == "" ] && exit 1;
+
+exit 0
+
+
+#### NOTES ####
+# To use this script, please install dunst from source
+#
+# You may need to `apt remove` notify-osd and/or dunst first, and then:
+#
+# git clone https://github.com/dunst-project/dunst
+# cd dunst
+# make PREFIX=/usr
+# sudo make PREFIX=/usr install
+#
+# If dunst does not start by itself, you can add it to your .xinitrc or .profile
